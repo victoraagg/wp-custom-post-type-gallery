@@ -66,7 +66,7 @@ function cpt_gallery_scripts(){
 add_action( 'admin_head-post.php', 'cpt_gallery_scripts' );
 add_action( 'admin_head-post-new.php', 'cpt_gallery_scripts' );
 
-function cpt_gallery_save( $post_id ) {
+function cpt_gallery_save( $post_id, $post ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
         return;
     }
@@ -77,9 +77,9 @@ function cpt_gallery_save( $post_id ) {
         return;
     if ( ! current_user_can( 'edit_post', $post_id ) )
         return;
-    if ( CPT_GALLERY_TYPE != $_POST['post_type'] )
+    if ( CPT_GALLERY_TYPE != $post->post_type )
         return;
-    if ( $_POST['gallery'] ){
+    if ( isset($_POST['gallery']) ){
         $gallery_data = array();
         for ($i = 0; $i < count( $_POST['gallery']['image_url'] ); $i++ ){
             if ( '' != $_POST['gallery']['image_url'][$i]){
@@ -91,8 +91,6 @@ function cpt_gallery_save( $post_id ) {
         } else {
             delete_post_meta( $post_id, 'gallery_data' );
         }
-    }else{
-        delete_post_meta( $post_id, 'gallery_data' );
     }
 }
-add_action( 'save_post', 'cpt_gallery_save' );
+add_action( 'save_post', 'cpt_gallery_save', 20, 2 );
