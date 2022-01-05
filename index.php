@@ -39,6 +39,7 @@ function cpt_gallery_metabox_callback(){
 	wp_nonce_field( basename(__FILE__), 'cpt_gallery_nonce' );
 	global $post;
 	$gallery_data = get_post_meta( $post->ID, 'gallery_data', true );
+    
     echo '<div id="img_box_container">';
     if ( isset( $gallery_data['image_url'] ) ){
         foreach ($gallery_data['image_url'] as $key => $photo) {
@@ -54,6 +55,16 @@ function cpt_gallery_metabox_callback(){
         }
     }
     echo '</div>';
+
+    echo '<div style="display:none" id="master_box">';
+    echo '<div class="gallery_single_row">';
+    echo '<div class="gallery_area image_container" onclick="open_media_uploader_image(this)">';
+    echo '<input class="meta_image_url" value="" type="hidden" name="gallery[image_url][]" />';
+    echo '</div>';
+    echo '<hr>';
+    echo '</div>';
+    echo '</div>';
+
     echo '<input class="button" type="button" value="Add New" onclick="open_media_uploader_image();"/>';
 }
 
